@@ -63,6 +63,18 @@ for (const width of [1280, 360]) {
   }));
   shots.push(`bug-01-long-values-${width}-fullpage.png — вся страница целиком; scrollWidth=${metrics.scrollWidth} при clientWidth=${metrics.clientWidth}`);
 
+  // 5. BUG-02: двойной клик при уже показанном подтверждении.
+  // Регистрируем первого обычным кликом (подтверждение появляется и остаётся),
+  // затем второго — двойным кликом. Вёрстка при этом не прыгает, поэтому
+  // второй клик попадает в кнопку и отправляет уже очищенную форму.
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await fill(page, { name: 'Первый', email: 'first@mail.ru', password: 'Parol123', confirm: 'Parol123', agree: true });
+  await page.click('button[type="submit"]');
+  await fill(page, { name: 'Второй', email: 'second@mail.ru', password: 'Parol123', confirm: 'Parol123', agree: true });
+  await page.dblclick('button[type="submit"]');
+  await shot(page, `bug-02-double-submit-${width}.png`, `двойной клик: запись создана, но показаны ошибки, ширина ${width}`);
+
   await context.close();
 }
 
