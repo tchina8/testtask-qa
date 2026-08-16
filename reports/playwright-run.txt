@@ -1,0 +1,63 @@
+﻿
+Running 2 tests using 1 worker
+
+node.exe : (node:19344) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:19344) Wa... env being set.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-warnings ...` to show where the warning was created)
+ширина 1280: {"scrollWidth":5327,"clientWidth":1280,"cardRight":880,"nameScrollWidth":4902,"nameClientWidth":430,"metaScrollWidth":2036,"metaClientWidth":430}
+  x  1 tests\bug-01-overflow.spec.js:21:3 › BUG-01: длинные имя и email не должны ломать вёрстку (ширина 1280) (301ms)
+(node:19104) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ширина 360: {"scrollWidth":4943,"clientWidth":360,"cardRight":344,"nameScrollWidth":4902,"nameClientWidth":278,"metaScrollWidth":2036,"metaClientWidth":278}
+  x  2 tests\bug-01-overflow.spec.js:21:3 › BUG-01: длинные имя и email не должны ломать вёрстку (ширина 360) (307ms)
+
+
+  1) tests\bug-01-overflow.spec.js:21:3 › BUG-01: длинные имя и email не должны ломать вёрстку (ширина 1280) 
+
+    Error: страница шире окна на 4047 px
+
+    expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1281
+    Received:    5327
+
+      52 |       metrics.scrollWidth,
+      53 |       `страница шире окна на ${metrics.scrollWidth - metrics.clientWidth} px`
+    > 54 |     ).toBeLessThanOrEqual(metrics.clientWidth + 1);
+         |       ^
+      55 |
+      56 |     // 2. Имя и email должны переноситься внутри карточки, а не уезжать вправо.
+      57 |     expect(metrics.nameScrollWidth, 'имя не переносится').toBeLessThanOrEqual(metrics.nameClientWidth + 1);
+        at C:\Users\Dmnz\Desktop\testtask-qa\tests\bug-01-overflow.spec.js:54:7
+
+    Error Context: test-results\bug-01-overflow-BUG-01-дли-d9b44-ломать-вёрстку-ширина-1280-\error-context.md
+
+  2) tests\bug-01-overflow.spec.js:21:3 › BUG-01: длинные имя и email не должны ломать вёрстку (ширина 360) 
+
+    Error: страница шире окна на 4583 px
+
+    expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 361
+    Received:    4943
+
+      52 |       metrics.scrollWidth,
+      53 |       `страница шире окна на ${metrics.scrollWidth - metrics.clientWidth} px`
+    > 54 |     ).toBeLessThanOrEqual(metrics.clientWidth + 1);
+         |       ^
+      55 |
+      56 |     // 2. Имя и email должны переноситься внутри карточки, а не уезжать вправо.
+      57 |     expect(metrics.nameScrollWidth, 'имя не переносится').toBeLessThanOrEqual(metrics.nameClientWidth + 1);
+        at C:\Users\Dmnz\Desktop\testtask-qa\tests\bug-01-overflow.spec.js:54:7
+
+    Error Context: test-results\bug-01-overflow-BUG-01-дли-7c1bc--ломать-вёрстку-ширина-360-\error-context.md
+
+  2 failed
+    tests\bug-01-overflow.spec.js:21:3 › BUG-01: длинные имя и email не должны ломать вёрстку (ширина 1280) 
+    tests\bug-01-overflow.spec.js:21:3 › BUG-01: длинные имя и email не должны ломать вёрстку (ширина 360) 
+
