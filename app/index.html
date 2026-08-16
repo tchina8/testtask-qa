@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Регистрация</title>
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --card: #ffffff;
+    --text: #1d2129;
+    --muted: #6b7280;
+    --border: #d4d7dd;
+    --accent: #2f6fed;
+    --error: #d92d20;
+    --ok-bg: #e7f6ec;
+    --ok-text: #17603a;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 32px 16px;
+    font: 16px/1.5 -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+  }
+
+  .wrap { max-width: 480px; margin: 0 auto; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  h1 { margin: 0 0 4px; font-size: 24px; }
+  h2 { margin: 0 0 16px; font-size: 18px; }
+  .subtitle { margin: 0 0 24px; color: var(--muted); font-size: 14px; }
+
+  .field { margin-bottom: 18px; }
+
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--text);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(47, 111, 237, .18);
+  }
+
+  .field.invalid input[type="text"],
+  .field.invalid input[type="email"],
+  .field.invalid input[type="password"] {
+    border-color: var(--error);
+  }
+
+  .checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+  }
+
+  .checkbox input { margin: 3px 0 0; flex: none; }
+
+  .error {
+    display: none;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--error);
+  }
+
+  .field.invalid .error { display: block; }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    font: inherit;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  button:hover { background: #2559c4; }
+
+  .notice {
+    display: none;
+    margin-bottom: 18px;
+    padding: 10px 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    background: var(--ok-bg);
+    color: var(--ok-text);
+  }
+
+  .notice.shown { display: block; }
+
+  ul.list { margin: 0; padding: 0; list-style: none; }
+
+  ul.list li {
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  ul.list li:first-child { border-top: none; }
+
+  .name { font-weight: 600; }
+  .meta { font-size: 13px; color: var(--muted); }
+  .empty { margin: 0; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="card">
+    <h1>Регистрация</h1>
+    <p class="subtitle">Заполните все поля, чтобы создать аккаунт.</p>
+
+    <div class="notice" id="notice" role="status"></div>
+
+    <form id="form" novalidate>
+      <div class="field" id="field-name">
+        <label for="name">Имя</label>
+        <input type="text" id="name" name="name" autocomplete="name">
+        <div class="error" id="error-name"></div>
+      </div>
+
+      <div class="field" id="field-email">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="email">
+        <div class="error" id="error-email"></div>
+      </div>
+
+      <div class="field" id="field-password">
+        <label for="password">Пароль</label>
+        <input type="password" id="password" name="password" autocomplete="new-password">
+        <div class="error" id="error-password"></div>
+      </div>
+
+      <div class="field" id="field-confirm">
+        <label for="confirm">Повтор пароля</label>
+        <input type="password" id="confirm" name="confirm" autocomplete="new-password">
+        <div class="error" id="error-confirm"></div>
+      </div>
+
+      <div class="field" id="field-agree">
+        <label class="checkbox" for="agree">
+          <input type="checkbox" id="agree" name="agree">
+          <span>Я согласен с условиями использования</span>
+        </label>
+        <div class="error" id="error-agree"></div>
+      </div>
+
+      <button type="submit">Отправить</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Зарегистрированные пользователи</h2>
+    <p class="empty" id="empty">Пока никто не зарегистрирован.</p>
+    <ul class="list" id="list"></ul>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var STORAGE_KEY = 'registrations';
+
+  var form = document.getElementById('form');
+  var notice = document.getElementById('notice');
+  var list = document.getElementById('list');
+  var empty = document.getElementById('empty');
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      var data = raw ? JSON.parse(raw) : [];
+      return Array.isArray(data) ? data : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function save(items) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
+
+  function setError(field, message) {
+    var wrap = document.getElementById('field-' + field);
+    var box = document.getElementById('error-' + field);
+    box.textContent = message;
+    wrap.classList.add('invalid');
+  }
+
+  function clearErrors() {
+    var fields = document.querySelectorAll('.field');
+    for (var i = 0; i < fields.length; i++) {
+      fields[i].classList.remove('invalid');
+    }
+    notice.classList.remove('shown');
+  }
+
+  function isEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+  }
+
+  function formatDate(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    function pad(n) { return n < 10 ? '0' + n : String(n); }
+    return pad(d.getDate()) + '.' + pad(d.getMonth() + 1) + '.' + d.getFullYear() +
+           ', ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  }
+
+  function render() {
+    var items = load();
+    list.innerHTML = '';
+
+    if (items.length === 0) {
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      var li = document.createElement('li');
+
+      var name = document.createElement('div');
+      name.className = 'name';
+      name.textContent = item.name || '';
+
+      var meta = document.createElement('div');
+      meta.className = 'meta';
+      var date = formatDate(item.createdAt);
+      meta.textContent = item.email + (date ? ' — ' + date : '');
+
+      li.appendChild(name);
+      li.appendChild(meta);
+      list.appendChild(li);
+    }
+  }
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    clearErrors();
+
+    var name = document.getElementById('name').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var password = document.getElementById('password').value;
+    var confirm = document.getElementById('confirm').value;
+    var agree = document.getElementById('agree').checked;
+
+    var valid = true;
+
+    if (name === '') {
+      setError('name', 'Введите имя');
+      valid = false;
+    }
+
+    if (email === '') {
+      setError('email', 'Введите email');
+      valid = false;
+    } else if (!isEmail(email)) {
+      setError('email', 'Введите корректный email');
+      valid = false;
+    } else {
+      var items = load();
+      var taken = false;
+      for (var i = 0; i < items.length; i++) {
+        if (String(items[i].email).toLowerCase() === email.toLowerCase()) {
+          taken = true;
+          break;
+        }
+      }
+      if (taken) {
+        setError('email', 'Этот email уже зарегистрирован');
+        valid = false;
+      }
+    }
+
+    if (password === '') {
+      setError('password', 'Введите пароль');
+      valid = false;
+    } else if (password.length < 8) {
+      setError('password', 'Пароль должен содержать не менее 8 символов');
+      valid = false;
+    }
+
+    if (confirm === '') {
+      setError('confirm', 'Повторите пароль');
+      valid = false;
+    } else if (confirm !== password) {
+      setError('confirm', 'Пароли не совпадают');
+      valid = false;
+    }
+
+    if (!agree) {
+      setError('agree', 'Необходимо согласиться с условиями');
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    var records = load();
+    records.push({
+      name: name,
+      email: email,
+      createdAt: new Date().toISOString()
+    });
+    save(records);
+
+    form.reset();
+    render();
+
+    notice.textContent = 'Регистрация прошла успешно.';
+    notice.classList.add('shown');
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
