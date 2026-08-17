@@ -1,0 +1,27 @@
+﻿
+=== S-02 — двойная отправка ===
+A. настоящий dblclick:       {"rawLength":84,"records":1,"emails":["race-a@mail.ru"],"listItems":1,"listText":["Гонка Arace-a@mail.ru — 17.08.2026, 09:18"],"noticeVisible":true,"noticeText":"Регистрация прошла успешно.","formVisible":true,"emptyMsgShown":false,"visibleErrors":[]}
+B. три click() в одном такте: {"rawLength":84,"records":1,"emails":["race-b@mail.ru"],"listItems":1,"listText":["Гонка Brace-b@mail.ru — 17.08.2026, 09:18"],"noticeVisible":false,"noticeText":"Регистрация прошла успешно.","formVisible":true,"emptyMsgShown":false,"visibleErrors":["Введите имя","Введите email","Введите пароль","Повторите пароль","Необходимо согласиться с условиями"]}
+C. Enter + клик одновременно: {"rawLength":84,"records":1,"emails":["race-c@mail.ru"],"listItems":1,"listText":["Гонка Crace-c@mail.ru — 17.08.2026, 09:18"],"noticeVisible":false,"noticeText":"Регистрация прошла успешно.","formVisible":true,"emptyMsgShown":false,"visibleErrors":["Введите имя","Введите email","Введите пароль","Повторите пароль","Необходимо согласиться с условиями"]}
+D. dblclick вторым подряд:   {"rawLength":167,"records":2,"emails":["race-d1@mail.ru","race-d2@mail.ru"],"listItems":2,"listText":["Первыйrace-d1@mail.ru — 17.08.2026, 09:18","Второйrace-d2@mail.ru — 17.08.2026, 09:18"],"noticeVisible":false,"noticeText":"Регистрация прошла успешно.","formVisible":true,"emptyMsgShown":false,"visibleErrors":["Введите имя","Введите email","Введите пароль","Повторите пароль","Необходимо согласиться с условиями"]}
+   позиция кнопки: до 588 px, после заполнения 588 px
+
+=== S-04 — повреждённое содержимое localStorage ===
+строка не-JSON           → форма видна: true, записей в списке: 0, сообщение о пустом списке: true
+                          ошибки в консоли: нет
+объект вместо массива    → форма видна: true, записей в списке: 0, сообщение о пустом списке: true
+                          ошибки в консоли: нет
+массив без поля email    → форма видна: true, записей в списке: 1, сообщение о пустом списке: false
+                          ошибки в консоли: нет
+массив с null внутри     → форма видна: true, записей в списке: 0, сообщение о пустом списке: false
+                          ошибки в консоли: pageerror: Cannot read properties of null (reading 'name')
+обрезанный JSON          → форма видна: true, записей в списке: 0, сообщение о пустом списке: true
+                          ошибки в консоли: pageerror: Cannot read properties of null (reading 'name')
+
+=== S-08 — две вкладки на одном localStorage ===
+после регистрации во вкладке 1: {"rawLength":84,"records":1,"emails":["tabs@mail.ru"],"listItems":1,"listText":["Вкладка 1tabs@mail.ru — 17.08.2026, 09:18"],"noticeVisible":true,"noticeText":"Регистрация прошла успешно.","formVisible":true,"emptyMsgShown":false,"visibleErrors":[]}
+тот же email во вкладке 2:      {"rawLength":84,"records":1,"emails":["tabs@mail.ru"],"listItems":0,"listText":[],"noticeVisible":false,"noticeText":"","formVisible":true,"emptyMsgShown":true,"visibleErrors":["Этот email уже зарегистрирован"]}
+  дубликат пойман: да — Этот email уже зарегистрирован
+другой email из вкладки 2:      {"rawLength":180,"records":2,"emails":["tabs@mail.ru","tabs-other@mail.ru"],"listItems":2,"listText":["Вкладка 1tabs@mail.ru — 17.08.2026, 09:18","Вкладка 2 другойtabs-other@mail.ru — 17.08.2026, 09:18"],"noticeVisible":true,"noticeText":"Регистрация прошла успешно.","formVisible":true,"emptyMsgShown":false,"visibleErrors":[]}
+  запись вкладки 1 уцелела: да
+

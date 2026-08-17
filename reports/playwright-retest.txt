@@ -1,0 +1,18 @@
+﻿
+Running 2 tests using 1 worker
+
+node.exe : (node:10052) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:10052) Wa... env being set.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-warnings ...` to show where the warning was created)
+ширина 1280: {"scrollWidth":1280,"clientWidth":1280,"cardRight":880,"nameScrollWidth":430,"nameClientWidth":430,"metaScrollWidth":430,"metaClientWidth":430}
+  ok 1 tests\bug-01-overflow.spec.js:21:3 › BUG-01: длинные имя и email не должны ломать вёрстку (ширина 1280) (460ms)
+ширина 360: {"scrollWidth":360,"clientWidth":360,"cardRight":344,"nameScrollWidth":278,"nameClientWidth":278,"metaScrollWidth":278,"metaClientWidth":278}
+  ok 2 tests\bug-01-overflow.spec.js:21:3 › BUG-01: длинные имя и email не должны ломать вёрстку (ширина 360) (233ms)
+
+  2 passed (1.5s)
+

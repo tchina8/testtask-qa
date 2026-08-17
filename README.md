@@ -54,8 +54,11 @@ npx --yes http-server ./app -p 8765 -c-1
 npx playwright test --reporter=list
 ```
 
-Ожидаемый результат — **2 failed**. Тест падает намеренно: он проверяет BUG-01
-на ширинах 1280 и 360. Сохранённый вывод — [reports/playwright-run.txt](reports/playwright-run.txt).
+Результат зависит от того, применён ли фикс BUG-01:
+
+- **до фикса — 2 failed.** Тест падал намеренно, на реальном дефекте.
+  Сохранённый вывод: [reports/playwright-run.txt](reports/playwright-run.txt).
+- **после фикса — 2 passed.** Вывод: [reports/playwright-retest.txt](reports/playwright-retest.txt).
 
 ### Вспомогательные скрипты
 
@@ -85,7 +88,8 @@ node tests/probe-naive-claims.mjs
 |---|---|
 | Тест-план: 12 проверок, 9 негативных и граничных | [reports/test-plan.md](reports/test-plan.md) |
 | Отчёт о прогоне: 11 пройдено, 1 провалена, 6 сценариев сверх плана | [reports/test-run.md](reports/test-run.md) |
-| BUG-01 — длинное значение ломает вёрстку | [reports/bugs/bug-01-long-value-overflow.md](reports/bugs/bug-01-long-value-overflow.md) |
+| BUG-01 — длинное значение ломает вёрстку (**закрыт**) | [reports/bugs/bug-01-long-value-overflow.md](reports/bugs/bug-01-long-value-overflow.md) |
+| Повторная проверка после фикса BUG-01 | [reports/retest.md](reports/retest.md) |
 | BUG-02 — двойной клик: ошибки вместо подтверждения | [reports/bugs/bug-02-double-submit-shows-errors.md](reports/bugs/bug-02-double-submit-shows-errors.md) |
 | BUG-03 — битое хранилище роняет отрисовку | [reports/bugs/bug-03-broken-storage-blank-list.md](reports/bugs/bug-03-broken-storage-blank-list.md) |
 | Падающий автотест + сохранённый вывод | `tests/bug-01-overflow.spec.js`, [reports/playwright-run.txt](reports/playwright-run.txt) |
@@ -105,13 +109,14 @@ BUG-01 и BUG-03 — разбором разметки и выводом кон�
 
 ## Что не сделано
 
-**Фикс BUG-01 и повторная проверка после фикса — не выполнены.**
-Причина: исчерпан лимит модели, до правки кода и повторного прогона чек-листа
-работа не дошла. Это незакрытый критерий приёмки из `SPEC.md`. Подготовка
-к нему сделана целиком: BUG-01 описан, падающий автотест на две ширины готов,
-стенд поднимается флагом `-c-1`, так что после фикса повторная проверка —
-это одна команда `npx playwright test`, а не ручной обход. Роль «Тестировщик»
-код не правит, фикс должен делать отдельная сессия-фиксер.
+**Фикс BUG-01 не закоммичен.** Правка `app/index.html` пришла извне и лежит
+в рабочем дереве незакоммиченной. Коммитить чужую правку кода в роли
+«Тестировщик» я не стал — это шаг сессии-фиксера. Сам фикс проверен:
+BUG-01 закрыт, отчёт — [reports/retest.md](reports/retest.md).
+
+**BUG-02 и BUG-03 не чинились** — фикс делался по одному баг-репорту.
+Оба воспроизводятся после фикса без изменений, это зафиксировано в отчёте
+о повторной проверке.
 
 **Сценарий S-09 (значение вставлено из буфера) не проверен.**
 Не по нехватке времени, а по выбору способа: первый полный сценарий выполнен
